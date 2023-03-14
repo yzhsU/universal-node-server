@@ -1,16 +1,16 @@
 const path = require('path');
-const fastify = require('fastify')();
+const routes = require('./router/routes');
+const fastifyCompress = require('fastify-compress');
+const fastify = require('fastify')({ logger: { level: 'debug' } });
 
-fastify.register(require('@fastify/static'), {
-    root: path.join(__dirname, 'public햣 '),
-    prefix: '/', // 클라이언트에서 접근할 URL prefix
-  });
-
-// 라우터 등록
-fastify.register(require('./router'));
-
-// 서버 실행
-fastify.listen({ port: 3000 }, (err, address) => {
+//라우터 등록
+fastify
+  //라우터파일 추가
+  .register(routes)
+  //compress 플러그인
+  .register(fastifyCompress)
+  //서버실행
+  .listen({ port: 3000 }, (err, address) => {
     if (err) throw err;
     console.log(`Server listening on ${address}`);
   });
